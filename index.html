@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+
+<script src="mapa.js"></script>
+<script src="paredes.js"></script>
+<script src="main.js"></script>
+
+<style>
+</style>
+
 </head>
 <body>
-    
+    <canvas id="myCanvas" width="900" height="900" style="background-color: black;"></canvas>
+    <script>
+        var canH=1200,canW=700;
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        const  maps=new Main(5);
+        maps.pintarMapa(ctx);
+
+        ctx.fillStyle = 'red'
+        ctx.fillRect(20,20,20,20)
+    </script>
 </body>
 </html>
