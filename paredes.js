@@ -1,6 +1,5 @@
-//var canvas = document.getElementById("myCanvas");
-//var ctx = canvas.getContext("2d");
-class Pared{
+
+ class Pared{
     color="blue";
     constructor(x,y,w,h){
         this.posX=x;
@@ -9,9 +8,12 @@ class Pared{
         this.heigth=h;
     }
     paint(ctx) {
+        
         ctx.fillStyle = this.color;
         ctx.fillRect(this.posX, this.posY, this.width, this.height);
+        // console.log("hola")
     }
 
 }
+
 

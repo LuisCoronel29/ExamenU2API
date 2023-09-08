@@ -2,25 +2,28 @@
 <html>
 <head>
 
-<script src="mapa.js"></script>
-<script src="paredes.js"></script>
-<script src="main.js"></script>
 
 <style>
 </style>
 
 </head>
 <body>
-    <canvas id="myCanvas" width="900" height="900" style="background-color: black;"></canvas>
-    <script>
+    <script type="module" src="mapa.js"></script>
+    <script src="paredes.js"></script>
+    <script type="module" src="main.js"></script>
+    <canvas id="myCanvas" width="900" height="900" style="border:solid blue"></canvas>
+    <script type="module">
+        import { Main } from './main.js';
+        import { Mapa } from './mapa.js';
         var canH=1200,canW=700;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
-        const  maps=new Main(5);
-        maps.pintarMapa(ctx);
+        var  mapa= new Main();
+        mapa.pintarMapa(ctx);
+        
+        
+        
 
-        ctx.fillStyle = 'red'
-        ctx.fillRect(20,20,20,20)
     </script>
 </body>
 </html>

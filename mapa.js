@@ -1,10 +1,11 @@
-// import './paredes.js';
+ import './paredes.js';
+// import { Pared } from './paredes.js';
 //var canvas = document.getElementById("myCanvas");
 //var ctx = canvas.getContext("2d");
-class Mapa{
+export class Mapa{
      mapas=[];
     constructor(){
-        
+        this.add();
     }
     add(){
    
@@ -24,8 +25,17 @@ class Mapa{
     this.mapas.push(new Pared(150,150,100,50));
 
     this.mapas.push(new Pared(150,150,50,100));
-    };
 
+    };
+    pintar(ctx) {
+        var aux=this.mapas;
+        for (var i = 0; i < this.mapas.length; i++) {
+                // this.mapas[i].paint(ctx);
+                // console.log(this.mapas[i]);
+                ctx.fillStyle=aux[i].color;
+                ctx.fillRect(aux[i].posX,aux[i].posY,aux[i].width,aux[i].height);
+        }
+    };
     seTocan(rect1, rect2) {
         return (
             rect1.x < rect2.x + rect2.width &&
