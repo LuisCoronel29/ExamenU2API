@@ -1,11 +1,14 @@
- import './paredes.js';
+
 // import { Pared } from './paredes.js';
 //var canvas = document.getElementById("myCanvas");
 //var ctx = canvas.getContext("2d");
-export class Mapa{
+ export class Mapa{
      mapas=[];
     constructor(){
         this.add();
+    }
+    getMapa(){
+        return this.mapas;
     }
     add(){
    
@@ -27,15 +30,6 @@ export class Mapa{
     this.mapas.push(new Pared(150,150,50,100));
 
     };
-    pintar(ctx) {
-        var aux=this.mapas;
-        for (var i = 0; i < this.mapas.length; i++) {
-                // this.mapas[i].paint(ctx);
-                // console.log(this.mapas[i]);
-                ctx.fillStyle=aux[i].color;
-                ctx.fillRect(aux[i].posX,aux[i].posY,aux[i].width,aux[i].height);
-        }
-    };
     seTocan(rect1, rect2) {
         return (
             rect1.x < rect2.x + rect2.width &&
@@ -44,6 +38,22 @@ export class Mapa{
             rect1.y + rect1.height > rect2.y
         );
         };
+
+}
+class Pared{
+    color="blue";
+    constructor(x,y,w,h){
+        this.posX=x;
+        this.posY=y;
+        this.width=w;
+        this.heigth=h;
+    }
+    paint(ctx) {
+        
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.posX, this.posY, this.width, this.height);
+        // console.log("hola")
+    }
 
 }
  
