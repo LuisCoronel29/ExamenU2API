@@ -4,12 +4,15 @@ class Main {
     constructor() {
         this.canvas = document.getElementById("myCanvas");
         this.ctx = this.canvas.getContext("2d");
-        this.marcoI = new Image();
-        this.paredSI = new Image();
+        this.fantasma1Image = new Image();
+        this.fantasma2Image= new Image();
+        this.fantasma3Image= new Image();
         this.pacmanImage = new Image();
-        this.marcoI.src="marco-I.jpg"
+        this.fantasma1Image.src="fantasma1.png";
+        this.fantasma2Image.src="fantasma2.jpg";
+        this.fantasma3Image.src="fantasma3.png";
         this.pacmanImage.src = "pacman.jpg"; // Ruta de la imagen de Pac-Man
-        this.map = new Mapa(this.pacmanImage);
+        this.map = new Mapa(this.pacmanImage,this.fantasma1Image,this.fantasma2Image,this.fantasma3Image);
         this.velocidad = 5;
         this.addEventListeners();
     }
@@ -45,7 +48,9 @@ class Main {
 
         });
     }
-
+    getPuntaje(){
+        return this.map.getPuntos();
+    }
     inicio(ctx) {
         let imagenes=0;
         
@@ -75,10 +80,13 @@ class Mapa{
     f1=new Pared(375,520,40,40);
     f2=new Pared(425,520,40,40);
     f3=new Pared(475,520,40,40);
-    constructor(pacmanImage) {
+    constructor(pacmanImage,fantasma1Image,fantasma2Image,fantasma3Image) {
         this.canvas = document.getElementById("myCanvas");
         this.ctx = this.canvas.getContext("2d");
         this.pacman = pacmanImage; // Asigna la imagen de Pac-Man
+        this.fantasma1=fantasma1Image;
+        this.fantasma2=fantasma2Image;
+        this.fantasma3=fantasma3Image;
         this.player.setColor("#E4FF0B");
         this.f1.setColor("red");
         this.f2.setColor("green");
@@ -87,14 +95,13 @@ class Mapa{
         this.dirF1=2;
         this.difF2=2;
         this.dirF3=2;
+        this.puntaje=0;
         this.pausa=false;
         this.add();
         this.pintar(this.ctx);
         this.moverPacman = this.moverPacman.bind(this); // Asegurar que moverPacman tenga el contexto correcto
         window.requestAnimationFrame(this.moverPacman);
        
-    
-        //this.agregarCirculos();
     }
     pausar() {
         this.pausa = !this.pausa;
@@ -199,19 +206,6 @@ class Mapa{
         this.mapas.push(new Pared(450,600,25,80));
 
     };
-    hayColisionCirculoRectangulo(circulo, rectangulo) {
-        // Calcula el punto más cercano en el rectángulo al centro del círculo
-        let puntoMasCercanoX = Math.max(rectangulo.x, Math.min(circulo.x, rectangulo.posX + rectangulo.width));
-        let puntoMasCercanoY = Math.max(rectangulo.y, Math.min(circulo.y, rectangulo.posY + rectangulo.heigth));
-
-        // Calcula la distancia entre el punto más cercano y el centro del círculo
-        let distanciaX = circulo.x - puntoMasCercanoX;
-        let distanciaY = circulo.y - puntoMasCercanoY;
-        let distancia = Math.sqrt((distanciaX * distanciaX) + (distanciaY * distanciaY));
-
-        // Comprueba si la distancia es menor o igual al radio del círculo
-        return distancia <= circulo.radio;
-    }
 
     seTocan(pared1, pared2, margen =1) {
         return (
@@ -278,6 +272,7 @@ class Mapa{
         
             
            this.moverFantasma();
+           this.crearComida();
             window.requestAnimationFrame(this.moverPacman);
             this.repintar(this.ctx);
         }
@@ -693,40 +688,43 @@ class Mapa{
         }
     
     }
+    getPuntos(){
+        return this.puntaje;
+    }
+     sumarPuntos(puntos) {
+        puntaje += puntos;
+    }
+    verificarColisionConComida(player) {
+        for (let i = 0; i < this.comida.length; i++) {
+            const comida = this.comida[i];
     
-    
-    
-    agregarCirculos() {
-        const radio = 10;
-        const separacion = 20.;
-        let cont=0
-        for (let x = 70; x < 850; x += separacion + 2 * radio) {
-            for (let y = 70; y < 830; y += separacion + 2 * radio) {
-                const circulo = new Circulo(x + radio, y + radio, radio);
-                if (!this.hayColisionConParedes(circulo)) {
-                    cont++;
-                    console.log(x,y);
-                    this.comida.push(circulo);
-                }
+            // Verificar colisión entre el jugador y la comida
+            if (
+                player.x < comida.x + comida.width &&
+                player.x + player.width > comida.x &&
+                player.y < comida.y + comida.height &&
+                player.y + player.height > comida.y
+            ) {
+                // Eliminar la comida de la lista de comidas
+
+                this.comida.splice(i, 1);
+                this.sumarPuntos(10);
             }
         }
     }
-
-    hayColisionConParedes(circulo) {
-        // Verificar si el círculo colisiona con las paredes u otros obstáculos
-        for (const objeto of this.mapas) {
-            if (hayColisionCirculoRectangulo(circulo, objeto)) {
-                return true;
-            }
-        }
-        return false;
+    
+    crearComida() {
+        setInterval(() => {
+             const nuevaComida = new pared(450,450, 40, 40); 
+             this.nuevaComida.setColor("#F28E07");
+             this.comida.push(nuevaComida); 
+        }, 2000);
     }
-    
 
-    
     repintar(ctx){
         ctx.fillStyle="black";
         ctx.fillRect(50,50,850,850);
+
         for(var i=0;i<this.mapas.length;i++)
         {
             // console.log(this.mapas[i]);
@@ -746,9 +744,12 @@ class Mapa{
             this.mapas[i].paint(ctx);
         }
         ctx.drawImage(this.pacman, this.player.posX, this.player.posY,40,40);
-        this.f1.paint(ctx);
-        this.f2.paint(ctx);
-        this.f3.paint(ctx);
+        ctx.drawImage(this.fantasma1, this.f1.posX, this.f1.posY,40,40);
+        ctx.drawImage(this.fantasma2, this.f2.posX, this.f2.posY,40,40);
+        ctx.drawImage(this.fantasma3, this.f3.posX, this.f3.posY,40,40);
+        // this.f1.paint(ctx);
+        // this.f2.paint(ctx);
+        // this.f3.paint(ctx);
     }
 }
 
@@ -799,21 +800,6 @@ class Pared{
 
 }
 
-class Circulo {
-    constructor(x, y, radio) {
-        this.x = x;
-        this.y = y;
-        this.radio = radio;
-    }
-
-    paint(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radio, 0, Math.PI * 2);
-        ctx.fillStyle = "#EFF207"; // Cambia el color a tu elección
-        ctx.fill();
-        ctx.closePath();
-    }
-}
 
 
 

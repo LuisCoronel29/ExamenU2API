@@ -15,6 +15,16 @@
         var ctx = canvas.getContext("2d");
         var  mapa= new Main();
         mapa.inicio(ctx);
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "white";
+        ctx.fillText("Score: "+mapa.getPuntaje(), 10, 20);
+        let nivel=1;
+        if(mapa.getPuntaje()>25*(nivel/2))
+        {
+            nivel ++;
+        }
+
+        ctx.fillText("Nivel: "+nivel, 300, 20);
    
 
         
