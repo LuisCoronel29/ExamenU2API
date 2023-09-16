@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- <script src="paredes.js"></script>
-<script src="mapa.js"></script> -->
+<meta charset="utf-8">
 <script src="main.js"></script>
 <style>
 </style>
@@ -10,12 +9,14 @@
 </head>
 <body>
     <canvas id="myCanvas" width="900" height="900" style="background-color: black;"></canvas>
-    <script type="module" >
-        var canH=1200,canW=700;
+    <script >
+        var canH=900,canW=900;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         var  mapa= new Main();
-        mapa.inicio();
+        mapa.inicio(ctx);
+   
+
         
 
     </script>
